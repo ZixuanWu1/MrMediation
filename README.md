@@ -1,5 +1,20 @@
 # MrMediation
 
-This is the R package for GRAPPLE (Genome-wide mR Analysis under Pervasive PLEiotropy), a comprehensive framework for Mendelian Randomization.
+This is the R package for MrMediation, a Bayesian framework for Mendelian Randomization.
 
 ## Installation
+
+The package can be installed in R from this Github repository:
+
+```
+library(devtools)
+install_github("ZixuanWu1/MrMediation")
+```
+To make sure the package , you might to first install RCPP from CRAN
+
+```
+install.packages(""
+```
+
+
+

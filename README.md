@@ -19,7 +19,7 @@ install_github("ZixuanWu1/MrMediation")
 
 ## Basic Usage
 
-Recall in the Mediation setting, we have $$\Gamma = B \cdot \Gamma + \alpha + \epsilon,$$
+Recall in the Mediation setting, we have $$\Gamma = B \cdot \Gamma + \alpha ,$$
 where $\Gamma$ is the matrix of true SNP effects, $B$ is an upper-triangular matrix with zero diagonals, $\alpha$ is the horizontal pleiotropy and $\epsilon$ is the noise. One might equivalently write this as $$\Gamma = (I + \tilde{B}) \alpha$$
 
 In order to run MrMediation, we will need at least two inputs, Gamma_hat and Sd_hat. The Gamma_hat matrix is an observation of $\Gamma$. Typically it is  a $K \times P$ matrix where $K$ is the number of phenotypes and $P$ is the number of the measured genetic variants. The Sd_hat matrix is the matrix of the standard deviation of noise and is of same dimension as Gamma_hat. 
@@ -47,7 +47,7 @@ result = BayesMediation(Gamma_hat, Sd_hat, cor = cor_mat, indirect = T)
 Sometimes we might see a warning that the algorithm might not have convergenced. This problem could be solved by using more iterations or changing the initialization method. One can also look at the traceplot of parameters for MCMC diagnosis. For instance, the following function gives the traceplot of the parameter of insterest of all the chains.
 
 ```
-traceplot(result, par = "B", ind = c(1,2))
+traceplot(result$raw, par = "B", ind = c(1,2))
 ```
 
 (Here we are using $B[1,2]$ as an example.)

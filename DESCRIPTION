@@ -1,6 +1,6 @@
 Package: MrMediation
 Type: Package
-Title: An R Package for Mendelian Randomization in mediation setting.
+Title: An R Package for Mendelian Randomization in the mediation setting.
 Version: 1.0
 Date: 2022-10-06
 Authors@R: c(person("Jingshu", "Wang", email = "jingshuw@uchicago.edu", role = c("aut")), person("Ethan", "Lewis", email = "ethanlewis@uchicago.edu", role = c("aut")), person("Zixuan", "Wu", email = "zixuanwu@uchicago.edu", role = c("aut", "cre")))

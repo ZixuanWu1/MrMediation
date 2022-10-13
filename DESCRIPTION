@@ -7,13 +7,7 @@ Author: Ethan Lewis, Jingshu Wang, Zixuan Wu
 Maintainer: zixuanwu@uchicago.edu
 Description: A Bayesian framework for Mendelian Randomization in the mediation setting.
 License: What license is it under?
-Imports: 
-    Rcpp (>= 1.0.9),
-    coda,
-    doParallel
-    foreach
-    ggplot2
-    stats
+Imports: Rcpp (>= 1.0.9),coda,doParallel,foreach,ggplot2, stats
 LinkingTo: Rcpp, RcppArmadillo
 RoxygenNote: 7.2.1
 Encoding: UTF-8

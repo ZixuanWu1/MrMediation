@@ -3,7 +3,7 @@ Type: Package
 Title: R Package for MR in Mediation Setting
 Version: 1.0
 Date: 2022-10-06
-Authors@R: c(person("Jingshu", "Wang", email = "jingshuw@uchicago.edu", role = c("aut", "cre")), person("Ethan", "Lewis", email = "ethanlewis@uchicago.edu", role = c("aut", "cre")), person("Zixuan", "Wu", email = "zixuanwu@uchicago.edu", role = c("aut", "cre")))
+Authors@R: c(person("Jingshu", "Wang", email = "jingshuw@uchicago.edu", role = c("aut")), person("Ethan", "Lewis", email = "ethanlewis@uchicago.edu", role = c("aut")), person("Zixuan", "Wu", email = "zixuanwu@uchicago.edu", role = c("aut", "cre")))
 Description: A Bayesian framework for Mendelian Randomization in the mediation setting.
 License: What license is it under?
 Imports: Rcpp (>= 1.0.9), coda, doParallel, foreach, ggplot2, stats

@@ -1,11 +1,10 @@
 Package: MrMediation
 Type: Package
-Title: What the package does (short line)
+Title: R Package for MR in Mediation Setting
 Version: 1.0
 Date: 2022-10-06
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
+Authors@R: c(person("Ethan", "Lewis"), person("Jingshu", "Wang"), person("Zixuan", "Wu"))
+Description: A Bayesian framework for Mendelian Randomization in the mediation setting.
 License: What license is it under?
 Imports: Rcpp (>= 1.0.9)
 LinkingTo: Rcpp, RcppArmadillo

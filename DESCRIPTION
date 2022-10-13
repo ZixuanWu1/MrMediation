@@ -1,14 +1,14 @@
 Package: MrMediation
 Type: Package
-Title: R package for MR Mediation model.
+Title: What the package does (short line)
+Title: A Bayesian framework for Mendelian Randomization in the mediation setting.
 Version: 1.0
 Date: 2022-10-06
+Author: Who wrote it
+Maintainer: Who to complain to <yourfault@somewhere.net>
 Author: Ethan Lewis, Jingshu Wang, Zixuan Wu
 Maintainer: zixuanwu@uchicago.edu
-Description: A Bayesian framework for Mendelian Randomization in the mediation setting.
+Description: More about what it does (maybe more than one line)
 License: What license is it under?
-Imports: Rcpp
-LinkingTo: Rcpp, RcppArmadillo
-RoxygenNote: 7.2.1
-Encoding: UTF-8
+Imports: Rcpp (>= 1.0.9)
 

@@ -32,8 +32,9 @@
 #' 
 #' @export
 BayesMediation = function(Gamma_hat, Sd_hat, init = "Random", iter = 6000,
-                     warmup = 3000, second = F,  inv = FALSE,
-                     cor = NULL, Raw = T, total = F, indirect = F) {
+                          warmup = 3000, second = F,  inv = FALSE,
+                          cor = NULL, Raw = T, total = F, indirect = F, n_traits = NULL, 
+                          alpha_0 = 3, alpha_1 = 3) {
   registerDoParallel(cores=4)
   P = length(Gamma_hat[1,])
   K = length(Gamma_hat[, 1])
@@ -62,11 +63,12 @@ BayesMediation = function(Gamma_hat, Sd_hat, init = "Random", iter = 6000,
   
   #First Stage
   result1 = gibbs_wrapper(iter, warmup, chains = 4,
-                            Gamma_hat, Sd_hat, sigma = 0.1, 
-                            sigma_1 = sigma1,
-                            sigma_0 = sigma0,
-                            p = pi,
-                            parallel = TRUE, init = init, cor_mat = cor)
+                          Gamma_hat, Sd_hat, sigma = 0.1, 
+                          sigma_1 = sigma1,
+                          sigma_0 = sigma0,
+                          p = pi,
+                          parallel = TRUE, init = init, cor_mat = cor, num_traits = n_traits, alpha_0 = alpha_0,
+                          alpha_1 = alpha_1)
   
   
   
@@ -75,7 +77,7 @@ BayesMediation = function(Gamma_hat, Sd_hat, init = "Random", iter = 6000,
                                         'sigma1', "sigma0", 
                                         "p"), K, T = warmup, inv = inv)
   
-  if(max(summarys1[, 8]) > 1.1){
+  if(max(summarys1[, 8][! is.na(summarys1[, 8])]) > 1.1){
     warning("The maximum R_hat is greater than 1.1. The gibbs sampler might fail
             to converge in the first stage")
   }
@@ -119,19 +121,20 @@ BayesMediation = function(Gamma_hat, Sd_hat, init = "Random", iter = 6000,
     pi[1] = out$Pi 
     
     result2 = gibbs_wrapper(iter, warmup, chains = 4,
-                              Gamma_hat, Sd_hat, sigma = 0.1, 
-                              sigma_1 = sigma1,
-                              sigma_0 = sigma0,
-                              p = pi,
-                              parallel = TRUE, init = init, cor_mat = cor)
-  
+                            Gamma_hat, Sd_hat, sigma = 0.1, 
+                            sigma_1 = sigma1,
+                            sigma_0 = sigma0,
+                            p = pi,
+                            parallel = TRUE, init = init, cor_mat = cor, num_traits = n_traits, alpha_0 = alpha_0,
+                            alpha_1 = alpha_1)
+    
     
     summarys2  = summary_gibbs(result2, c("B", 
                                           "sigma", 
                                           'sigma1', "sigma0", 
                                           "p"), K, T = warmup, inv = inv)
     
-    if(max(summarys2[, 8]) > 1.1){
+    if(max(summarys1[, 8][! is.na(summarys1[, 8])]) > 1.1){
       warning("The maximum R_hat is greater than 1.1. The gibbs sampler might fail
             to converge in the first stage")
     }
@@ -167,6 +170,128 @@ BayesMediation = function(Gamma_hat, Sd_hat, init = "Random", iter = 6000,
     ls$raw = result1
   }
   return(ls)
-
   
+  
+}
+
+
+
+
+
+
+gibbs_wrapper = function(N, warmup, chains = 4,
+                         Gamma_hat, Sd_hat, sigma, sigma_1, sigma_0, p,
+                         parallel = TRUE, init = "Random", ratio = 10, cor_mat = NULL, Lambda = NULL,
+                         Lambda_inv = NULL, num_traits = NULL, alpha_0 = 3, alpha_1 = 3) {
+  P = length(Gamma_hat[1,])
+  K = length(Gamma_hat[, 1])
+  
+  #Set Hyperparameters
+  alpha_B = 2
+  beta_B = 0.5
+  alpha_0 = rep(alpha_0, K)
+  alpha_1 = rep(alpha_1, K)
+  stopifnot(length(sigma_0) == K)
+  stopifnot(length(sigma_1) == K)
+  beta_0 = sigma_0^2 * (alpha_0[1] - 1)
+  beta_1 = sigma_1^2 * (alpha_1[1] - 1)
+  a = rep(2, K)
+  stopifnot(length(p) == K)
+  b = a/p - a
+  
+  A = matrix(nrow=K, ncol=P);
+  Z = matrix(nrow=K, ncol = P);
+  
+  
+  outputs = list()
+  
+  #If correlation is non-zero, compute the covariance and inverse covariance
+  #matrices, if not provided.
+  if(! is.null(cor_mat) | ! is.null(num_traits)){
+    if (is.null(cor_mat)){
+      cor_mat = diag(K)
+    }
+    
+    if(is.null(Lambda_inv)){
+      require(magic)
+      
+      new_Lambda = diag( Sd_hat[,1] )%*% cor_mat %*% diag( Sd_hat[,1] )
+      
+      Lambda = new_Lambda
+      Lambda_inv = solve(new_Lambda )
+      
+      for(i in 2:length(Sd_hat[1, ])){
+        
+        new_Lambda = diag( Sd_hat[,i] )%*% cor_mat %*% diag( Sd_hat[,i] )
+        
+        Lambda = adiag(Lambda, new_Lambda)
+        Lambda_inv = adiag(Lambda_inv, solve( new_Lambda ))
+        
+      }
+      
+      
+    }
+    
+  }
+  print(alpha_0)
+  each_chain_task = function(i) {
+    #Set initial values for parameters.
+    
+    sigma = runif(1)
+    if(init == "Random"){
+      sigma1 = runif(K)
+      sigma0 = sigma1 / ratio
+      p = runif(K, min = 0, max = 0.1)
+    }
+    else{
+      sigma1 = sigma_1
+      sigma0 = sigma_0 
+      p = p
+    }
+    B = random_upper_tri(K)
+    
+    
+    
+    if(is.null(num_traits)){
+      if( all(cor_mat == diag(K))){
+        this_output = gibbs_sampler(Gamma_hat, Sd_hat, N, B, sigma, sigma1,
+                                    sigma0, p, A, Z,
+                                    alpha_B, beta_B, alpha_0, alpha_1, beta_0, beta_1, a, b)
+      }
+      else{
+        this_output = gibbs_sampler_with_corr(Gamma_hat,
+                                              Sd_hat, cor_mat, N, B,
+                                              sigma, sigma1,
+                                              sigma0, p, A, Z,
+                                              alpha_B, beta_B, 
+                                              alpha_0, alpha_1, beta_0,
+                                              beta_1, a, b, Lambda, Lambda_inv)
+      }
+      
+    }
+    else{
+      this_output = gibbs_sampler_new(Gamma_hat,
+                                      Sd_hat, cor_mat, N, B,
+                                      sigma, sigma1,
+                                      sigma0, p, A, Z,
+                                      alpha_B, beta_B, 
+                                      alpha_0, alpha_1, beta_0,
+                                      beta_1, a, b, Lambda, Lambda_inv, num_traits)
+    }
+    
+    
+    this_output
+    
+  }
+  
+  
+  print(Sys.time())
+  if (parallel){
+    outputs = foreach(i=1:chains) %dopar% each_chain_task(i)
+  } else {
+    outputs = lapply(1:1, each_chain_task)
+  }
+  print(Sys.time())
+  
+  return (outputs)
 }

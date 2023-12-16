@@ -18,7 +18,7 @@ total_effect = function(results, K, warmup = 3000) {
   for(i in 1:m){
     for(j in 1:(len - warmup)){
       temp_B = results[[i]][["B"]][,,(j + warmup)]
-      effects[,( (i - 1) * (len - warmup) + j )] = compute_total(temp_B)[dim(temp_B)[1]:2]
+      effects[,( (i - 1) * (len - warmup) + j )] = compute_total(temp_B)[1, dim(temp_B)[1]:2]
     }}
   df = matrix(nrow = (K - 1), ncol = 4)
   for(i in 1:(K - 1)){
@@ -52,7 +52,7 @@ indirect_effect = function(results, K, warmup = 3000) {
   for(i in 1:m){
     for(j in 1:(len - warmup)){
       temp_B = results[[i]][["B"]][,,(j + warmup)]
-      effects[,( (i - 1) * (len - warmup) + j )] = (compute_total(temp_B) - temp_B)[dim(temp_B)[1]:2]
+      effects[,( (i - 1) * (len - warmup) + j )] = (compute_total(temp_B) - temp_B)[1,dim(temp_B)[1]:2]
     }
   }
   df = matrix(nrow = (K - 1), ncol = 4)

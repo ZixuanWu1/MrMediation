@@ -18,31 +18,27 @@ total_effect = function(results, K, warmup = 3000) {
   for(i in 1:m){
     for(j in 1:(len - warmup)){
       temp_B = results[[i]][["B"]][,,(j + warmup)]
-      for(u in 1:(K-1) )
-        effects[u,( (i - 1) * (len - warmup) + j )] = compute_total(temp_B,u)
-    }
-  }
+      effects[,( (i - 1) * (len - warmup) + j )] = compute_total(temp_B)[dim(temp_B)[1]:2]
+    }}
   df = matrix(nrow = (K - 1), ncol = 4)
   for(i in 1:(K - 1)){
     df[i, 1] = mean(effects[i,])
     df[i, 2:4] = quantile(effects[i,], c(0.025, 0.5, 0.975))
   }
-  colnames(df) = c("mean", "2.5%", "50%", "97.5")
-  row.names(df) = paste(rep("exp", (K - 1)), 1:(K - 1), sep = "")
-  return(df)
   
+  return(df)
   
   
 }
 
 
-#' Indirect effect
+#' Indirrect effedt
 #' 
-#' Estimate the indirect effect of an exposure on the outcome
+#' Estimate the indirrect effect of an exposure on the outcome
 #' 
 #' @param results results from gibbs_wrapper
 #' @param K number of phenotypes
-#' @param warump The length of warm-up period. Default is 3000
+#' @param warump The length of warmup period. Default is 3000
 #'  
 #' @return A matrix of indirect effect and its quantiles.
 #' 
@@ -56,8 +52,7 @@ indirect_effect = function(results, K, warmup = 3000) {
   for(i in 1:m){
     for(j in 1:(len - warmup)){
       temp_B = results[[i]][["B"]][,,(j + warmup)]
-      for(u in 1:(K-1) )
-        effects[u,( (i - 1) * (len - warmup) + j )] = compute_total(temp_B,u) - temp_B[1, (dim(temp_B)[1] + 1 - u)]
+      effects[,( (i - 1) * (len - warmup) + j )] = (compute_total(temp_B) - temp_B)[dim(temp_B)[1]:2]
     }
   }
   df = matrix(nrow = (K - 1), ncol = 4)
@@ -65,8 +60,7 @@ indirect_effect = function(results, K, warmup = 3000) {
     df[i, 1] = mean(effects[i,])
     df[i, 2:4] = quantile(effects[i,], c(0.025, 0.5, 0.975))
   }
-  colnames(df) = c("mean", "2.5%", "50%", "97.5")
-  row.names(df) = paste(rep("exp", (K - 1)), 1:(K - 1), sep = "")
+  
   return(df)
   
   
@@ -74,14 +68,7 @@ indirect_effect = function(results, K, warmup = 3000) {
 
 #' @keywords internal
 #'
-compute_total <- function(B, k){
-  p = (dim(B)[1] + 1 - k)
-  B = B[1:p, 1:p]
+compute_total <- function(B){
   K = length(B[,1])
-  if(K == 2){
-    return(B[1,2])
-  }
-  else{
-    return(B[1, K] + B[(K - 1), K] * compute_total(B[(1:(K - 1)), (1:(K-1))], 1))
-  }
+  return( solve(diag(K) - B)  - diag(K) )
 }

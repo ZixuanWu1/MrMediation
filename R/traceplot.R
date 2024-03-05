@@ -16,7 +16,7 @@
 #' @export
 traceplot <- function(results, par, ind, chains = -1, ylim = NA, T = 1000){
   par(mar=c(5, 4, 4, 7), xpd=TRUE)
-  len = tail(dim(results[[1]][[par]]), n = 1)
+  len = utils::tail(dim(results[[1]][[par]]), n = 1)
   
   #Consider all chains if not specified.
   if(chains[1] == -1){

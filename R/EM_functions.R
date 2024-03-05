@@ -131,9 +131,9 @@ zero.centered.em <- function(values, std.errors,
   }
   
   result =   list(
-    S1 = tail(estimates[estimates$variable=="S1", "estimate"] , 1),
-    S2 = tail(estimates[estimates$variable=="S2", "estimate"] , 1),
-    Pi = tail(estimates[estimates$variable=="Pi", "estimate"] , 1)
+    S1 = utils::tail(estimates[estimates$variable=="S1", "estimate"] , 1),
+    S2 = utils::tail(estimates[estimates$variable=="S2", "estimate"] , 1),
+    Pi = utils::tail(estimates[estimates$variable=="Pi", "estimate"] , 1)
   )
   
   return(result)

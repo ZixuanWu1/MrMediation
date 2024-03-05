@@ -120,7 +120,7 @@ zero.centered.em <- function(values, std.errors,
     print(ggplot(estimates[estimates$variable=="log_likelihood",], aes(n, estimate, color=factor(variable))) +
             geom_line() + ggtitle("EM Log Likelihood")
     )
-    curve(
+    graphics::curve(
       slab_prob*dnorm(x, 0, sqrt(sigma1.sq)) +
         (1-slab_prob)*dnorm(x, 0, sqrt(sigma2.sq)),
       min(values), max(values),

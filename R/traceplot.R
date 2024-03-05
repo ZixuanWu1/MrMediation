@@ -37,7 +37,7 @@ traceplot <- function(results, par, ind, chains = -1, ylim = NA, T = 1000){
     
     if(length(chains) > 1){
       for(i in 2:length(chains)){
-        lines((T + 1):len, results[[chains[i]]][[par]][ind[1], ind[2], ( (T+1):len)], type = "l",
+        graphics::lines((T + 1):len, results[[chains[i]]][[par]][ind[1], ind[2], ( (T+1):len)], type = "l",
               col = i)
       }
       
@@ -49,7 +49,7 @@ traceplot <- function(results, par, ind, chains = -1, ylim = NA, T = 1000){
     plot((T + 1):len, results[[chains[1]]][[par]][(T+1):len], type = "l",
          col = 1, ylab = par, xlab = "iterations")
     if(length(chains) > 1){    for(i in 2:length(chains)){
-      lines((T + 1):len, results[[chains[i]]][[par]][( (T+1):len)], type = "l",
+      graphics::lines((T + 1):len, results[[chains[i]]][[par]][( (T+1):len)], type = "l",
             col = i)
     }}
     
@@ -69,7 +69,7 @@ traceplot <- function(results, par, ind, chains = -1, ylim = NA, T = 1000){
     }
     
     if(length(chains) > 1){    for(i in 2:length(chains)){
-      lines((T + 1):len, results[[chains[i]]][[par]][ind, ( (T+1):len)], type = "l",
+      graphics::lines((T + 1):len, results[[chains[i]]][[par]][ind, ( (T+1):len)], type = "l",
             col = i)
     }}
     

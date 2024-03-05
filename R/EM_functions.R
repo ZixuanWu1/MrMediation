@@ -127,7 +127,7 @@ zero.centered.em <- function(values, std.errors,
       xlab="beta", ylab="density"
     )
     title("Fitted Distribtuion vs Smoothed Data Density")
-    lines(density(values, weights = se.to.weights(std.errors)), col="blue")
+    graphics::lines(density(values, weights = se.to.weights(std.errors)), col="blue")
   }
   
   result =   list(

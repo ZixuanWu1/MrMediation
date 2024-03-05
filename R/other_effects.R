@@ -13,7 +13,7 @@
 total_effect = function(results, K, warmup = 3000) {
   results = result_process(results, K)
   m = length(results)
-  len = tail(dim(results[[1]][["B"]]), n = 1)
+  len = utils::tail(dim(results[[1]][["B"]]), n = 1)
   effects = matrix(0, (K - 1), m * (len - warmup))
   for(i in 1:m){
     for(j in 1:(len - warmup)){
@@ -47,7 +47,7 @@ total_effect = function(results, K, warmup = 3000) {
 indirect_effect = function(results, K, warmup = 3000) {
   results = result_process(results, K)
   m = length(results)
-  len = tail(dim(results[[1]][["B"]]), n = 1)
+  len = utils::tail(dim(results[[1]][["B"]]), n = 1)
   effects = matrix(0, (K - 1), m * (len - warmup))
   for(i in 1:m){
     for(j in 1:(len - warmup)){

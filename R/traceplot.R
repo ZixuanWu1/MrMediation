@@ -16,7 +16,7 @@
 #' @export
 traceplot <- function(results, par, ind, chains = -1, ylim = NA, T = 1000){
   par(mar=c(5, 4, 4, 7), xpd=TRUE)
-  len = tail(dim(results[[1]][[par]]), n = 1)
+  len = utils::tail(dim(results[[1]][[par]]), n = 1)
   
   #Consider all chains if not specified.
   if(chains[1] == -1){
@@ -37,7 +37,7 @@ traceplot <- function(results, par, ind, chains = -1, ylim = NA, T = 1000){
     
     if(length(chains) > 1){
       for(i in 2:length(chains)){
-        lines((T + 1):len, results[[chains[i]]][[par]][ind[1], ind[2], ( (T+1):len)], type = "l",
+        graphics::lines((T + 1):len, results[[chains[i]]][[par]][ind[1], ind[2], ( (T+1):len)], type = "l",
               col = i)
       }
       
@@ -49,7 +49,7 @@ traceplot <- function(results, par, ind, chains = -1, ylim = NA, T = 1000){
     plot((T + 1):len, results[[chains[1]]][[par]][(T+1):len], type = "l",
          col = 1, ylab = par, xlab = "iterations")
     if(length(chains) > 1){    for(i in 2:length(chains)){
-      lines((T + 1):len, results[[chains[i]]][[par]][( (T+1):len)], type = "l",
+      graphics::lines((T + 1):len, results[[chains[i]]][[par]][( (T+1):len)], type = "l",
             col = i)
     }}
     
@@ -69,13 +69,13 @@ traceplot <- function(results, par, ind, chains = -1, ylim = NA, T = 1000){
     }
     
     if(length(chains) > 1){    for(i in 2:length(chains)){
-      lines((T + 1):len, results[[chains[i]]][[par]][ind, ( (T+1):len)], type = "l",
+      graphics::lines((T + 1):len, results[[chains[i]]][[par]][ind, ( (T+1):len)], type = "l",
             col = i)
     }}
     
   }
   
-  legend("bottomright", legend = name,inset = c(-0.3, 0), col =c(1: length(chains)),
+  graphics::legend("bottomright", legend = name,inset = c(-0.3, 0), col =c(1: length(chains)),
          bty = "n", xpd=TRUE,  lty = 1)
 }
 

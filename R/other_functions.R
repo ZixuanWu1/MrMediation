@@ -19,7 +19,7 @@ random_upper_tri <- function(K) {
 #' 
 result_process <- function(results, K){
   m = length(results)
-  len = tail(dim(results[[1]][["B"]]), n = 1)
+  len = utils::tail(dim(results[[1]][["B"]]), n = 1)
   
   for(i in 1:m){
     for(j in 1:(len)){
@@ -57,7 +57,7 @@ estimates <- function(results, par, ind, chains = -1, T = 1000){
     results = results_sub
     
   }
-  len = tail(dim(results[[1]][[par]]), n = 1)
+  len = utils::tail(dim(results[[1]][[par]]), n = 1)
   means = rep(0, m)
   vars = rep(0, m)
   ESS = 0

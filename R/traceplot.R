@@ -75,7 +75,7 @@ traceplot <- function(results, par, ind, chains = -1, ylim = NA, T = 1000){
     
   }
   
-  legend("bottomright", legend = name,inset = c(-0.3, 0), col =c(1: length(chains)),
+  graphics::legend("bottomright", legend = name,inset = c(-0.3, 0), col =c(1: length(chains)),
          bty = "n", xpd=TRUE,  lty = 1)
 }
 

@@ -70,7 +70,7 @@ gibbs_wrapper = function(N, warmup, chains = 4,
   #matrices, if not provided.
   if(! is.null(cor_mat)){
     if(is.null(Lambda)){
-      require(magic)
+      requireNamespace('magic')
       Lambda = diag( Sd_hat[,1] )%*% cor_mat %*% diag( Sd_hat[,1] )
       for(i in 2:length(Sd_hat[1, ])){
         Lambda = adiag(Lambda, diag( Sd_hat[,i] ) %*% cor_mat %*% diag( Sd_hat[,i]))
@@ -78,7 +78,7 @@ gibbs_wrapper = function(N, warmup, chains = 4,
       
     }
     if(is.null(Lambda_inv)){
-      require(magic)
+      requireNamespace('magic')
       Lambda_inv = solve( diag(Sd_hat[,1] )%*% cor_mat %*% diag(Sd_hat[,1]) )
       for(i in 2:length(Sd_hat[1,])){
         Lambda_inv = adiag(Lambda_inv, solve( diag( Sd_hat[,i] )%*% cor_mat %*% 

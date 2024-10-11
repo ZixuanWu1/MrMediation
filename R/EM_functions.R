@@ -120,20 +120,20 @@ zero.centered.em <- function(values, std.errors,
     print(ggplot(estimates[estimates$variable=="log_likelihood",], aes(n, estimate, color=factor(variable))) +
             geom_line() + ggtitle("EM Log Likelihood")
     )
-    curve(
+    graphics::curve(
       slab_prob*dnorm(x, 0, sqrt(sigma1.sq)) +
         (1-slab_prob)*dnorm(x, 0, sqrt(sigma2.sq)),
       min(values), max(values),
       xlab="beta", ylab="density"
     )
-    title("Fitted Distribtuion vs Smoothed Data Density")
-    lines(density(values, weights = se.to.weights(std.errors)), col="blue")
+    graphics::title("Fitted Distribtuion vs Smoothed Data Density")
+    graphics::lines(density(values, weights = se.to.weights(std.errors)), col="blue")
   }
   
   result =   list(
-    S1 = tail(estimates[estimates$variable=="S1", "estimate"] , 1),
-    S2 = tail(estimates[estimates$variable=="S2", "estimate"] , 1),
-    Pi = tail(estimates[estimates$variable=="Pi", "estimate"] , 1)
+    S1 = utils::tail(estimates[estimates$variable=="S1", "estimate"] , 1),
+    S2 = utils::tail(estimates[estimates$variable=="S2", "estimate"] , 1),
+    Pi = utils::tail(estimates[estimates$variable=="Pi", "estimate"] , 1)
   )
   
   return(result)

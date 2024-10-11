@@ -1,12 +1,12 @@
 Package: MrMediation
 Type: Package
-Title: An R Package for Mendelian Randomization in the mediation setting.
+Title: An R Package for Mendelian Randomization in the mediation setting
 Version: 1.0
 Date: 2022-10-06
 Authors@R: c(person("Jingshu", "Wang", email = "jingshuw@uchicago.edu", role = c("aut")), person("Ethan", "Lewis", email = "ethanlewis@uchicago.edu", role = c("aut")), person("Zixuan", "Wu", email = "zixuanwu@uchicago.edu", role = c("aut", "cre")))
 Description: A Bayesian framework for Mendelian Randomization in the mediation setting.
 License: What license is it under?
-Imports: Rcpp (>= 1.0.9), coda, doParallel, foreach, ggplot2, stats
+Imports: Rcpp (>= 1.0.9), coda, doParallel, foreach, ggplot2, stats, magic
 LinkingTo: Rcpp, RcppArmadillo
 RoxygenNote: 7.2.1
 Encoding: UTF-8

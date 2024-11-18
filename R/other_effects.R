@@ -46,7 +46,7 @@ total_effect = function(results, K, warmup = 3000) {
 #' 
 #' @export
 
-indirect_effect = function(results, K, path = NULL, quantiles =  c(0.025, .5, 0.975),  warmup = 3000) {
+indirect_effect = function(results, K,  warmup = 3000, path = NULL, quantiles =  c(0.025, .5, 0.975)) {
   
   results = result_process(results, K)
   m = length(results)
